@@ -5,6 +5,9 @@ __author__ = '刘子恒'
 #百度音乐app的首页，首页的音乐分栏
 
 class home_music_page(home_page):
+        def __init__(self):
+            super().__init__()
+
         #上边栏
         search_layout_id='com.ting.mp3.android:id/search_layout'                                                        #搜索栏
         #搜索栏下方边栏

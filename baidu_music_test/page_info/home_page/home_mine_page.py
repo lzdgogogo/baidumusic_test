@@ -1,12 +1,16 @@
 from selenium.webdriver.common.by import By
 from baidu_music_test.page_info.home_page.home_page import home_page
 from baidu_music_test.utils import log_utils
+from baidu_music_test.utils.base_utils import base_utils
 
 __author__ = '刘子恒'
 
 #进入首页后点击我的页后，进入的页面，我的页
 
 class home_mine_page(home_page):
+        def __init__(self):
+            super().__init__()
+
         #上边栏
         skin_button_id='com.ting.mp3.android:id/skin'                        #皮肤
         message_button_id='com.ting.mp3.android:id/message'                  #信息
@@ -28,7 +32,7 @@ class home_mine_page(home_page):
         def click_unlogin_container(self):
             """功能：
                     点击非登录的头像，进入太合登录页"""
-            if self.find_element_by_mode_click(By.ID,self.unlogin_container_id) == 0:
+            if not self.find_element_and_action(By.ID,self.unlogin_container_id,'click','头像') == 0:
                 log_utils.F_ERROR('点击失败')
 
         def is_login(self):
@@ -37,12 +41,12 @@ class home_mine_page(home_page):
                 返回值：
                     1：在登录态
                     0：在非登陆态"""
-            try:
-                if self.find_element_by_mode_is_displayed(By.ID,self.unlogin_container_id) == 1:
-                    return 0
-            except:
-                if  self.find_element_by_mode_is_displayed(By.ID,self.login_user_img_id) == 1:
-                    return 1
+
+            if self.find_element_and_action(By.ID,self.unlogin_container_id,'is_displayed','非登录态布局') == 0:
+                return 0
+
+            elif  self.find_element_and_action(By.ID,self.login_user_img_id,'is_displayed','用户名') == 0:
+                return 1
 
 
 

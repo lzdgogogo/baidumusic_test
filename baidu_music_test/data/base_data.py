@@ -2,7 +2,7 @@ __author__ = '刘子恒'
 
 PlatformName='Android'
 PlatformVersion='5.0'
-DeviceName='123'
+DeviceName='040BBGHTEKUT'
 AppPackage='com.ting.mp3.android'
 AppActivity='com.baidu.music.ui.splash.SplashActivity'
 

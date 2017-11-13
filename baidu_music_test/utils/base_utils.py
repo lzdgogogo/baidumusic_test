@@ -46,7 +46,7 @@ class base_utils(object):
                 if not os.path.isdir(temp_path):        #检查文件夹是否存在
                       os.makedirs(temp_path)
                 temp_time = time.strftime('%H-%M-%S',time.localtime(time.time()))
-                self.driver.get_screenshot_as_file(temp_path+'/'+'%d'%self.number+'.'+temp_time+'.'+des+'.png')
+                self.driver.get_screenshot_as_file(temp_path+'/'+'%d'%self.number+'.\''+temp_time+'\'.'+des+'.png')
                 self.number += 1
 
         def wait_element_by_mode(self,t,mode,element='',thing=''):
@@ -64,7 +64,7 @@ class base_utils(object):
                         self.screenshot('错误截图：'+thing+'等待超时')
                         self.driver.quit()
                         sys.exit(-1)
-                log_utils.C_INFO(thing+'成功')
+                log_utils.C_INFO('等待'+thing+'成功')
 
         def reset_app(self):
                 """功能：
@@ -125,53 +125,42 @@ class base_utils(object):
                         log_utils.F_ERROR('error,please inset right paremater!')
                         sys.exit()
 
-        def is_element_display(self,mode,element='',thing=''):
+        def find_element_and_action(self,mode,element='',action=None,thing='',keys=''):
                 """功能：
-                        判断控件是否显示在当前页面上
+                        在当前页面上以某种方式查找一个控件，并且对其进行某种操作
                 参数：
                         mode：以哪种方式寻找控件，必须是以下几种:By.ID, By.CLASS_NAME, By.XPATH, By.NAME
                         element：控件的id或者xpath等，要跟前一项对应，
-                        thing：描述
+                        action：对查找元素进行的操作：“is_displayed”、“click”、“send_keys”
+                        keys：假如要进行send_keys的操作，就要发送一个keys
+                        thing：元素描述
                 返回值：
-                        1：查找的控件显示
-                        0：查找的控件不显示
-                        -1：查找不到要查找的控件，抛出异常
+                        0：查找的控件显示\点击成功\输入成功
+                        1：没有输入action参数，错误
+                        2：查找不到要查找的控件，抛出异常
                 例子：
-                        self.is_element_display(By.ID,'com.ting.mp3.android:id/day_tv','首页控件')"""
+                        """
                 try:
-                        if self.driver.find_element(mode,element).is_displayed():
-                                log_utils.C_INFO(thing+'显示')
-                                return 1
-                        else:
-                                log_utils.F_ERROR(thing+'未显示')
+                        element_info = self.driver.find_element(mode,element)
+                        if   action == "is_displayed":
+                                element_info.is_displayed()
+                                log_utils.C_INFO(thing+'显示正常')
                                 return 0
+                        elif   action == "click":
+                                element_info.click()
+                                log_utils.C_STEP('点击'+thing+'  点击成功')
+                                return 0
+                        elif   action == "send_keys":
+                                element_info.send_keys(keys)
+                                log_utils.C_STEP(thing+' '+action+' '+keys+'  输入信息成功')
+                                return 0
+                        else:
+                                log_utils.F_ERROR(thing+action+'  error')
+                                return 1
                 except:
                         log_utils.F_ERROR(thing+'不在当前页面')
                         self.screenshot('错误截图：要查找控件不在当前页面')
-                        return -1
-
-        def find_element_and_click(self,mode,element='',thing=''):
-                """功能：
-                        以某种方式查找控件并且点击，但是保证不会因为找不到控件而跳出
-                参数：
-                        mode：以哪种方式寻找控件，必须是以下几种:By.ID, By.CLASS_NAME, By.XPATH, By.NAME
-                        element：控件的id或者xpath等，要跟前一项对应，
-                        thing：描述
-                返回值：
-                        1：点击成功
-                        -1：控件不在当前页面
-                例子：
-                        if self.find_element_and_click(By.ID,'com.ting.mp3.android:id/day_tv') == -1:   sys.exit()"""
-
-                try:
-                        self.driver.find_element(mode,element).click()
-                        log_utils.C_INFO('点击'+thing)
-                        return 1
-                except:
-                        log_utils.F_ERROR(thing+'不在当前页面')
-                        self.screenshot('错误截图：要点击控件不在当前页面')
-                        return -1
-
+                        return 2
 
 
 

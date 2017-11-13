@@ -1,8 +1,9 @@
+from baidu_music_test.test_suite.test_login import test_login
+
 __author__ = '刘子恒'
 
-from baidu_music_test.testCase.test_login import login_test
 
-class run_test(login_test):
+class run_case(test_login):
     def run_test(self):
 
         self.wait_start_app()
@@ -12,13 +13,12 @@ class run_test(login_test):
         self.login_test01()
 
 
-
         self.tear_down()
 
 
 
 if __name__ == '__main__':
-    test = run_test()
+    test = run_case()
 
     test.run_test()
 
