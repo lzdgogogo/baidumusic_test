@@ -1,6 +1,5 @@
 from baidu_music_test.utils.base_utils import base_utils
-
-__author__ = '刘子恒'
+# -*- coding:utf-8 -*-
 
 #主页--随心听页面
 

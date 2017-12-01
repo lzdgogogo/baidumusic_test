@@ -2,8 +2,7 @@ from selenium.webdriver.common.by import By
 from baidu_music_test.page_info.home_page.home_page import home_page
 from baidu_music_test.utils import log_utils
 from baidu_music_test.utils.base_utils import base_utils
-
-__author__ = '刘子恒'
+# -*- coding:utf-8 -*-
 
 #进入首页后点击我的页后，进入的页面，我的页
 
@@ -32,7 +31,7 @@ class home_mine_page(home_page):
         def click_unlogin_container(self):
             """功能：
                     点击非登录的头像，进入太合登录页"""
-            if not self.find_element_and_action(By.ID,self.unlogin_container_id,'click','头像') == 0:
+            if not self.find_element_and_action(By.ID,self.unlogin_container_id,self.action.click,'头像') == 0:
                 log_utils.F_ERROR('点击失败')
 
         def is_login(self):
@@ -42,10 +41,10 @@ class home_mine_page(home_page):
                     1：在登录态
                     0：在非登陆态"""
 
-            if self.find_element_and_action(By.ID,self.unlogin_container_id,'is_displayed','非登录态布局') == 0:
+            if self.find_element_and_action(By.ID,self.unlogin_container_id,self.action.is_displayed,'非登录态布局') == 0:
                 return 0
 
-            elif  self.find_element_and_action(By.ID,self.login_user_img_id,'is_displayed','用户名') == 0:
+            elif  self.find_element_and_action(By.ID,self.login_user_img_id,self.action.is_displayed,'用户名') == 0:
                 return 1
 
 

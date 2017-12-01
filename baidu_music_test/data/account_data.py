@@ -1,4 +1,4 @@
-__author__ = '刘子恒'
+# -*- coding:utf-8 -*-
 #存放账号信息
 
 TAIHE_PHONE_NUMBER='13522113807'        #太合用户名

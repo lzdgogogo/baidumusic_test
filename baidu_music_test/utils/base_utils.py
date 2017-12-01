@@ -9,12 +9,17 @@ import sys
 from baidu_music_test.data import base_data
 from baidu_music_test.utils import log_utils
 import time
-
-__author__ = '刘子恒'
+# -*- coding:utf-8 -*-
 
 class base_utils(object):
 
         TIME=time.strftime('%Y-%m-%d-%H-%M-%S',time.localtime(time.time()))
+
+        class action():
+            click = 'click'
+            is_displayed = 'is_displayed'
+            send_keys = 'send_keys'
+            get_text = 'get_text'
 
         def __init__(self):
                 """功能：
@@ -50,21 +55,24 @@ class base_utils(object):
                 self.number += 1
 
         def wait_element_by_mode(self,t,mode,element='',thing=''):
-                """功能：
-                        等待某控件出现，等待一段规定的时间，假如没有出现就会报错跳出
+            """功能：
+                    等待某控件出现，等待一段规定的时间，假如没有出现就会返回1
                 参数：
-                        t：设置等待的时间
-                        mode：查找模式，例如By,ID,By.XPATH
-                        element：等待的控件查找依据，比如id,xpath,必须要跟mode的模式相匹配
-                        thing：等待的元素的描述"""
-                try:
-                        WebDriverWait(self.driver,t).until(expected_conditions.presence_of_element_located((mode,element)))
-                except:
-                        log_utils.F_ERROR(thing+'超时')
-                        self.screenshot('错误截图：'+thing+'等待超时')
-                        self.driver.quit()
-                        sys.exit(-1)
-                log_utils.C_INFO('等待'+thing+'成功')
+                    t：设置等待的时间
+                    mode：查找模式，例如By,ID,By.XPATH
+                    element：等待的控件查找依据，比如id,xpath,必须要跟mode的模式相匹配
+                    thing：等待的元素的描述
+                返回值：
+                    0：等待成功
+                    1：等待失败"""
+            try:
+                WebDriverWait(self.driver,t).until(expected_conditions.presence_of_element_located((mode,element)))
+            except:
+                log_utils.F_ERROR(thing+'超时')
+                self.screenshot('错误截图：'+thing+'等待超时')
+                return 1
+            log_utils.C_INFO('等待'+thing+'成功')
+            return 0
 
         def reset_app(self):
                 """功能：
@@ -131,13 +139,14 @@ class base_utils(object):
                 参数：
                         mode：以哪种方式寻找控件，必须是以下几种:By.ID, By.CLASS_NAME, By.XPATH, By.NAME
                         element：控件的id或者xpath等，要跟前一项对应，
-                        action：对查找元素进行的操作：“is_displayed”、“click”、“send_keys”
+                        action：对查找元素进行的操作：“is_displayed”、“click”、“send_keys”、“get_text”
                         keys：假如要进行send_keys的操作，就要发送一个keys
                         thing：元素描述
                 返回值：
                         0：查找的控件显示\点击成功\输入成功
                         1：没有输入action参数，错误
                         2：查找不到要查找的控件，抛出异常
+                        tmpstr：要获取的控件中文本信息
                 例子：
                         """
                 try:
@@ -154,6 +163,10 @@ class base_utils(object):
                                 element_info.send_keys(keys)
                                 log_utils.C_STEP(thing+' '+action+' '+keys+'  输入信息成功')
                                 return 0
+                        elif    action == "get_text":
+                                tmp = element_info.text
+                                log_utils.C_STEP('获取'+thing+'的文本信息成功')
+                                return tmp
                         else:
                                 log_utils.F_ERROR(thing+action+'  error')
                                 return 1

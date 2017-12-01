@@ -1,8 +1,6 @@
 from baidu_music_test.test_case.login_case import login_case
 from baidu_music_test.utils import log_utils
-
-__author__ = '刘子恒'
-
+# -*- coding:utf-8 -*-
 class test_login(login_case):
     def __init__(self):
         super().__init__()

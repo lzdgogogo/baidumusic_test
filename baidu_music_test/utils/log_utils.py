@@ -1,5 +1,4 @@
-#encoding:utf8
-__author__ = '刘子恒'
+# -*- coding:utf-8 -*-
 
 import os
 import logging

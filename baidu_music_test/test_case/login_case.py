@@ -9,10 +9,8 @@ from baidu_music_test.page_info.home_page.home_music_page import home_music_page
 from baidu_music_test.page_info.login_page.taihe_account_login_page import taihe_account_login_page
 from baidu_music_test.page_info.login_page.taihe_phonenumber_login_page import taihe_phonenumber_login_page
 from baidu_music_test.utils import log_utils
+# -*- coding:utf-8 -*-
 
-
-
-__author__ = '刘子恒'
 
 class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_page,taihe_account_login_page,dialog_page,setting_page):
 
@@ -46,14 +44,17 @@ class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_pag
             参数：
                 mode：1--输入正确的账号密码       2--输入错误的密码      3--输入错误的账号
             返回值：
+                2：等待某控件超时测试失败
                 1：在登录态
                 0：不在登录态
             注意：
                 太合登录有一个输入错误密码次数达到三次的时候就开始弹出验证码的策略，因此不可以连续多次输入错误的密码"""
 
-        self.wait_element_by_mode(base_data.wait_time_mid,By.XPATH,self.go_to_baidu_login_button_xpath,'进入登录页')
+        if self.wait_element_by_mode(base_data.wait_time_mid,By.XPATH,self.go_to_baidu_login_button_xpath,'进入登录页') == 1:
+            return 2
         self.go_to_account_login_page()
-        self.wait_element_by_mode(base_data.wait_time_mid,By.XPATH,self.account_login_log_xpath,'进入账号密码登录页')
+        if self.wait_element_by_mode(base_data.wait_time_mid,By.XPATH,self.account_login_log_xpath,'进入账号密码登录页') == 1:
+            return 2
         if mode == 1:
             self.input_account(account_data.TAIHE_PHONE_NUMBER)         #输入账号密码，点击登录按钮，点击登录后会联网登录，返回首页
             self.input_password(account_data.TAIHE_PASSWORD)
@@ -67,15 +68,15 @@ class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_pag
             log_utils.C_STEP('输入错误的密码，点击登录按钮')                                      #验证错误密码的异常情况的方法是，睡眠几秒，观察是否停留在此页
             self.screenshot('输入错误密码后截图')
             self.my_sleep(5)
-            if self.find_element_and_action(By.XPATH,self.login_button_xpath,'is_displayed','账号密码登录页') == 0:
+            if self.find_element_and_action(By.XPATH,self.login_button_xpath,self.action.is_displayed,'账号密码登录页') == 0:
                 return 0
             else:
                 return 1
 
-        self.wait_element_by_mode(base_data.wait_time_long,By.ID,self.more_button_id,'回到首页')     #验证登录态
+        if self.wait_element_by_mode(base_data.wait_time_long,By.ID,self.more_button_id,'回到首页') == 1:       #验证登录态
+             return 2
         self.click_more_button()
         self.my_sleep()
-        log_utils.C_STEP('点击更多按钮，验证登录态')
         self.screenshot('登录态截图')
         if self.check_is_login_in_more_page() == 1:
             log_utils.C_INFO('在登录态')
@@ -89,12 +90,15 @@ class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_pag
                 登出的主过程：点击更多按钮--检查登录态--点击设置按钮--上划--点击退出--点击确认退出
             返回值：
                 0：当前还在登录态，登出失败
-                1：当前不在登录态，登出成功"""
+                1：当前不在登录态，登出成功
+                2：等待某控件超时，测试失败"""
         log_utils.C_INFO('开始登出')
 
-        self.wait_element_by_mode(base_data.wait_time_long,By.ID,self.more_button_id,'更多按钮')
+        if self.wait_element_by_mode(base_data.wait_time_long,By.ID,self.more_button_id,'更多按钮') == 1:
+            return 2
         self.click_more_button()
-        self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.setting_container_id,'更多菜单')
+        if self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.setting_container_id,'更多菜单') == 1:
+            return 2
         log_utils.C_STEP('检查登录态')
         if self.check_is_login_in_more_page() == 0:
             log_utils.F_ERROR('没有在登陆态，先去退出登录')
@@ -107,9 +111,11 @@ class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_pag
                 log_utils.C_INFO('登录成功，继续测试！')
                 self.reset_app()
                 log_utils.C_INFO('开始登出')
-                self.wait_element_by_mode(base_data.wait_time_long,By.ID,self.more_button_id,'更多按钮')
+                if self.wait_element_by_mode(base_data.wait_time_long,By.ID,self.more_button_id,'更多按钮') == 1:
+                    return 2
                 self.click_more_button()
-                self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.setting_container_id,'更多菜单')
+                if self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.setting_container_id,'更多菜单') == 1:
+                    return 2
 
         self.click_setting_container()
         self.my_sleep(3)
@@ -122,7 +128,8 @@ class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_pag
         self.my_sleep()
         self.click_yes_button()
 
-        self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.more_button_id,'回到主页')
+        if self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.more_button_id,'回到主页') == 1:
+            return 2
         log_utils.C_STEP('验证是否登出成功，点击更多按钮')
         self.click_more_button()
         self.screenshot('登录状态截图')
@@ -146,10 +153,14 @@ class login_case(home_music_page,home_left_more_page,taihe_phonenumber_login_pag
 
         log_utils.C_INFO('开始测试登录功能')
         self.after_login()
-        if self.taihe_login(1) == 1:
+        tmp = self.taihe_login(1)
+        if tmp == 1:
             log_utils.P_PASS('登录成功！测试通过')
             return 1
-        else:
+        elif tmp == 0:
             log_utils.F_FAIL('登录失败！测试失败')
+            return 0
+        else:
+            log_utils.F_ERROR('等待超时！测试失败')
             return 0
 

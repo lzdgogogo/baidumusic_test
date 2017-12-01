@@ -1,8 +1,7 @@
 from selenium.webdriver.common.by import By
 from baidu_music_test.utils import log_utils
 from baidu_music_test.utils.base_utils import base_utils
-
-__author__ = '刘子恒'
+# -*- coding:utf-8 -*-
 
 #设置页面，通过点击设置按钮来进入，可以在这里查看版本和退出登录等
 
@@ -21,13 +20,13 @@ class setting_page(base_utils):
         def click_signout_button_first(self):
             """功能：
                     点击退出按钮，退出按钮在页面底部，所以要先将页面滑到底部再点击。之后再弹出的底部栏，点击退出登录"""
-            if not self.find_element_and_action(By.ID,self.signout_button_id,'click','退出按钮') == 0:
+            if not self.find_element_and_action(By.ID,self.signout_button_id,self.action.click,'退出按钮') == 0:
                 log_utils.F_FAIL('点击退出按钮失败')
                 return 1
 
         def click_signout_button_second(self):
             """功能：
                     点击弹出栏的退出按钮"""
-            if not self.find_element_and_action(By.XPATH,self.logout_layout_xpath,'click','退出按钮') == 0:
+            if not self.find_element_and_action(By.XPATH,self.logout_layout_xpath,self.action.click,'退出登录按钮') == 0:
                 log_utils.F_FAIL('点击退出按钮失败')
                 return 1
