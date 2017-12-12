@@ -32,10 +32,16 @@ class song_list_page(base_utils):
                                                     /android.widget.RelativeLayout[2]/android.widget.LinearLayout[2]\
                                                     /android.widget.RelativeLayout[1]"                                  #第一首歌的更多按钮
 
+    song_list_page_second_song_name_xpath = "//android.widget.ListView[@resource-id=\"com.ting.mp3.android:id/view_listview\"]\
+                                                    /android.widget.RelativeLayout[3]/android.widget.LinearLayout[1]\
+                                                    /android.widget.LinearLayout[1]/android.widget.LinearLayout[1]\
+                                                    /android.widget.LinearLayout[1]/android.widget.TextView[1]"         #第二首歌的歌名
+
     song_list_page_third_song_name_xpath = "//android.widget.ListView[@resource-id=\"com.ting.mp3.android:id/view_listview\"]\
                                                     /android.widget.RelativeLayout[4]/android.widget.LinearLayout[1]\
                                                     /android.widget.LinearLayout[1]/android.widget.LinearLayout[1]\
                                                     /android.widget.LinearLayout[1]/android.widget.TextView[1]"         #第三首歌的歌名
+
     song_list_page_third_song_xpath = "//android.widget.ListView[@resource-id=\"com.ting.mp3.android:id/view_listview\"]\
                                                     /android.widget.RelativeLayout[4]"                                  #第三首歌的整体布局，点击这个可以播放第三首歌
 
@@ -43,6 +49,11 @@ class song_list_page(base_utils):
         """功能：
                 返回第三首歌的歌曲名"""
         return self.find_element_and_action(By.XPATH,self.song_list_page_third_song_name_xpath,self.action.get_text,'获取第三首歌的歌曲名')
+
+    def get_first_song_list_second_song_name(self):
+        """功能：
+                返回第二首歌的歌曲名"""
+        return self.find_element_and_action(By.XPATH,self.song_list_page_second_song_name_xpath,self.action.get_text,'获取第二首歌的歌曲名')
 
     def click_third_song_to_play_third_song(self):
         """功能：
@@ -62,4 +73,6 @@ class song_list_page(base_utils):
         if not self.find_element_and_action(By.ID,self.song_list_page_play_all_button_id,self.action.click,'点击榜单页面的播放全部按钮') == 0:
             log_utils.F_ERROR('点击榜单页面的播放全部按钮失败')
             return 1
+
+
 

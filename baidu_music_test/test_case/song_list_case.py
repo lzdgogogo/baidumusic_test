@@ -5,6 +5,7 @@ from baidu_music_test.page_info.home_page.home_music_song_list_page import home_
 from baidu_music_test.page_info.play_page.music_play_page import music_play_page
 from baidu_music_test.page_info.song_list_page import song_list_page
 from baidu_music_test.utils import log_utils
+from baidu_music_test.utils import api_utils
 
 
 class song_list_case(home_music_song_list_page,song_list_page,music_play_page):
@@ -17,13 +18,14 @@ class song_list_case(home_music_song_list_page,song_list_page,music_play_page):
                 2.获取第一个榜单的第一首歌曲的歌曲名
                 3.点击第一个榜单的播放全部按钮
                 4.在跳转到的歌曲播放页中验证正在播放的歌曲是否与第一首歌曲歌名一致
-                5.点击第一个榜单的‘>’按钮进入第一个榜单页面
+                5.点击第一个榜单的‘>’按钮进入第一个榜单页面，通过api获取前三首歌曲的歌曲名，并且跟页面中提取的进行对比
                 6.获取第三首歌的歌名，并且点击第三首歌条目
                 7.在跳转到的歌曲播放页中验证正在播放的歌曲是否与第三首歌曲歌名一致
                 8.点击返回按钮返回榜单页面
                 9.获取第一首歌名，并且名点击全部播放按钮
                 10.在跳转到的歌曲播放页中验证正在播放的歌曲是否与第一首歌曲歌名一致
             返回值：
+                4：从api获取某歌曲名失败
                 3：获取某歌曲名失败，测试失败
                 2：等待某控件超时，测试失败
                 1：测试失败
@@ -62,11 +64,23 @@ class song_list_case(home_music_song_list_page,song_list_page,music_play_page):
         self.click_first_song_list_enter_button()
         if self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.song_list_page_play_all_button_id,'进入第一个榜单的榜单页面') == 1:
             return 2
+        second_song_name = self.get_first_song_list_second_song_name()
         third_song_name = self.get_first_song_list_third_song_name()
-        if third_song_name == 1 or third_song_name == 2:
+        if third_song_name == 1 or third_song_name == 2 or second_song_name == 1 or second_song_name == 2:
             log_utils.F_ERROR('获取歌曲名失败，无法继续测试')
             return 3
+
+        log_utils.C_STEP('第一个榜单的第二首歌曲名为：'+second_song_name)
         log_utils.C_STEP('第一个榜单的第三首歌曲名为：'+third_song_name)
+
+        log_utils.C_STEP('开始从api获取热歌榜的前三首歌曲的歌曲名')
+        song_name_list = api_utils.get_new_song_list_first_song_name(3)
+        if not song_name_list == 1:
+            if first_song_name == song_name_list[0] and second_song_name == song_name_list[1] and third_song_name == song_name_list[2]:
+                log_utils.C_INFO('从api获取的前三首歌曲名与从页面中提取的歌曲名一致')
+            else:
+                log_utils.F_ERROR('从api获取的前三首歌曲名与从页面中提取的歌曲名不一致,请检查相关功能')
+                flag = 2
 
         self.click_third_song_to_play_third_song()
         if self.wait_element_by_mode(base_data.wait_time_mid,By.ID,self.music_play_page_artist_name_text_id,'进入歌曲播放页') == 1:
@@ -110,6 +124,8 @@ class song_list_case(home_music_song_list_page,song_list_page,music_play_page):
 
         if flag == 1:
             return 1
+        if flag == 2:
+            return 4
 
         return 0
 

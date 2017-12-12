@@ -62,7 +62,6 @@ def __get_info(url = '', number = 0):
     else:
         log_utils.F_ERROR('重新获取信息多次失败，请检查接口和url。URL：'+url)
 
-
 def __check_result(dic):
     """功能：
             验证错误码，打印对应信息
@@ -70,7 +69,7 @@ def __check_result(dic):
             0：正常
             1：参数错误"""
     error_code = dic['error_code']
-    log_utils.C_INFO('错误码为：'+str(error_code))
+    log_utils.C_INFO('error_code：'+str(error_code))
     if error_code == 22000:
         log_utils.C_INFO('获取信息成功')
         return 0
@@ -253,6 +252,10 @@ def get_first_play_list_first_song_name(number):
         return 1
     return song_list
 
+
+
+
+
 def get_first_play_list_first_song_have_mv():
     """判断当前最热歌单第一名的歌单的第一首歌是否有mv
     步骤：
@@ -279,6 +282,9 @@ def get_first_play_list_first_song_have_mv():
     return first_song_have_mv_code
 
 def get_user_collect_song_list():
+    """根据token获取对应用户的收藏信息
+    返回值：
+        1：获取失败"""
     url = __get_url(api_parameter_data.common_host,api_parameter_data.get_collect_method,
                     pn = '0',rn = '50',token_ = '0822e1560A0808080A0D0B0C0D0D081512715638714a0314eb7f31af3b8ad4d1')
     dic = __get_info(url)
@@ -288,7 +294,5 @@ def get_user_collect_song_list():
     while i < total:
         song_name_list[i] = dic['result'][i]['title']
         i += 1
-    print(song_name_list)
-    return song_name_list
 
-get_user_collect_song_list()
+    return song_name_list
