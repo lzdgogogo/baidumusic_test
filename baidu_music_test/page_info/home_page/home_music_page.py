@@ -1,6 +1,6 @@
+# -*- coding:utf-8 -*-
 from selenium.webdriver.common.by import By
 from baidu_music_test.page_info.home_page.home_page import home_page
-# -*- coding:utf-8 -*-
 
 #百度音乐app的首页，首页的音乐分栏
 from baidu_music_test.utils import log_utils

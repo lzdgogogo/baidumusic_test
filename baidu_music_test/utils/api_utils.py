@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from urllib.request import urlopen
@@ -55,12 +54,14 @@ def __get_info(url = '', number = 0):
     result = __check_result(dic)
     if result == 0:
         return dic
-    elif (not result == 0) and i<=3:
+    elif (not result == 0) and i<3:
         i += 1
         log_utils.C_INFO('获取信息失败，第 %d 次重新获取信息' %i)
-        __get_info(url,i)
+        if __get_info(url,i) == 1:
+            return 1
     else:
         log_utils.F_ERROR('重新获取信息多次失败，请检查接口和url。URL：'+url)
+        return 1
 
 def __check_result(dic):
     """功能：
@@ -81,6 +82,19 @@ def __check_result(dic):
         log_utils.F_ERROR('未知错误码')
         log_utils.F_ERROR('error_message：'+dic['error_message'])
         return 2
+
+def __get_cookie():
+    """login_id是账号，password是密码的md5加密"""
+    url = 'http://passport.qianqian.com/login?login_id=13522113807&password=29eea60d91f9216d0ce950889eb637c9&device_id=v2pcweb-zkagfyuhly15132404684581&tpl=baidu_music&login_type=1'
+    page = urlopen(url)
+    data = page.read()
+    dic = json.loads(data)
+    if not dic['error_code'] == 0:
+        log_utils.F_ERROR('获取token失败！错误码为：'+dic['error_code'])
+        return 1
+
+    token = dic['token']
+    return token
 
 def __get_first_list_id_from_playlist(mode,url = ''):
     """功能：
@@ -252,10 +266,6 @@ def get_first_play_list_first_song_name(number):
         return 1
     return song_list
 
-
-
-
-
 def get_first_play_list_first_song_have_mv():
     """判断当前最热歌单第一名的歌单的第一首歌是否有mv
     步骤：
@@ -285,9 +295,14 @@ def get_user_collect_song_list():
     """根据token获取对应用户的收藏信息
     返回值：
         1：获取失败"""
+    token = __get_cookie()
+    if token == 1:
+        return 1
     url = __get_url(api_parameter_data.common_host,api_parameter_data.get_collect_method,
-                    pn = '0',rn = '50',token_ = '0822e1560A0808080A0D0B0C0D0D081512715638714a0314eb7f31af3b8ad4d1')
+                    pn = '0',rn = '50',token_ = token)
     dic = __get_info(url)
+    if dic == 1:
+        return 1
     song_name_list = {}
     i = 0
     total = dic['total']

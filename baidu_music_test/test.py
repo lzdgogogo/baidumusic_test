@@ -8,6 +8,10 @@ import urllib.parse
 from urllib.parse import quote
 from baidu_music_test.data import api_parameter_data
 from baidu_music_test.utils import log_utils
+import http.cookiejar
+from urllib.request import build_opener
+from urllib.request import HTTPCookieProcessor
+from urllib.request import install_opener
 
 
 def __get_url(host='',method='',**kwargs):
@@ -55,13 +59,14 @@ def __get_info(url = '', number = 0):
     result = __check_result(dic)
     if result == 0:
         return dic
-    elif (not result == 0) and i<=3:
+    elif (not result == 0) and i<3:
         i += 1
         log_utils.C_INFO('获取信息失败，第 %d 次重新获取信息' %i)
-        __get_info(url,i)
+        if __get_info(url,i) == 1:
+            return 1
     else:
         log_utils.F_ERROR('重新获取信息多次失败，请检查接口和url。URL：'+url)
-
+        return 1
 
 def __check_result(dic):
     """功能：
@@ -80,7 +85,6 @@ def __check_result(dic):
         return 1
     else:
         log_utils.F_ERROR('未知错误码')
-        log_utils.F_ERROR('error_message：'+dic['error_message'])
         return 2
 
 def __get_first_list_id_from_playlist(mode,url = ''):
@@ -280,8 +284,10 @@ def get_first_play_list_first_song_have_mv():
 
 def get_user_collect_song_list():
     url = __get_url(api_parameter_data.common_host,api_parameter_data.get_collect_method,
-                    pn = '0',rn = '50',token_ = '0822e1560A0808080A0D0B0C0D0D081512715638714a0314eb7f31af3b8ad4d1')
+                    pn = '0',rn = '50',token_ = get_cookie())
     dic = __get_info(url)
+    if dic == 1:
+        return 1
     song_name_list = {}
     i = 0
     total = dic['total']
@@ -291,4 +297,18 @@ def get_user_collect_song_list():
     print(song_name_list)
     return song_name_list
 
+def get_cookie():
+    url = 'http://passport.qianqian.com/login?login_id=13522113807&password=29eea60d91f9216d0ce950889eb637c9&device_id=v2pcweb-zkagfyuhly15132404684581&tpl=baidu_music&login_type=1'
+    page = urlopen(url)
+    data = page.read()
+    dic = json.loads(data)
+    if not dic['error_code'] == 0:
+        log_utils.F_ERROR('获取token失败！错误码为：'+dic['error_code'])
+        return 1
+
+    token = dic['token']
+    return token
+
+
+get_cookie()
 get_user_collect_song_list()

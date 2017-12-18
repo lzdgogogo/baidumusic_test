@@ -25,8 +25,13 @@ class home_mine_page(home_page):
 
         #离线缓存、最近播放、缓存管理
         local_music_id='com.ting.mp3.android:id/container_local_music'       #离线缓存
-        play_history_id='com.ting.mp3.android:id/container_playhistory'      #最近播放
-        down_load_music_id='com.ting.mp3.android:id/container_downloadmusic' #缓存管理
+        play_history_id='com.ting.mp3.android:id/img_playhistory'      #最近播放
+        download_music_id='com.ting.mp3.android:id/img_downloadmusic' #缓存管理
+
+        def click_play_history_button(self):
+            """点击最近播放"""
+            if not self.find_element_and_action(By.ID,self.play_history_id,self.action.click,'最近播放') == 0:
+                log_utils.F_ERROR('点击失败')
 
         def click_unlogin_container(self):
             """功能：

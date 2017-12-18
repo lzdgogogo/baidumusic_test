@@ -35,6 +35,10 @@ class music_play_page(base_utils):
                 获取正在播放的歌曲名"""
         return self.find_element_and_action(By.ID,self.music_play_page_song_name_text_id,self.action.get_text,'正在播放的歌曲名')
 
+    def get_current_play_time(self):
+        """获取当前播放时长"""
+        return self.find_element_and_action(By.ID,self.music_play_page_current_time_text_id,self.action.get_text,'获取已播放时长')
+
     def is_music_play_page_playing_song(self):
         """功能：
                 判断是否正在播放歌曲
@@ -44,7 +48,7 @@ class music_play_page(base_utils):
         log_utils.C_INFO('验证是否正在播放歌曲')
         first_time = self.find_element_and_action(By.ID,self.music_play_page_current_time_text_id,self.action.get_text,'获取已播放时长')
         log_utils.C_INFO('当前已播放时长为：'+first_time+'   睡眠一段时间')
-        self.my_sleep(10)
+        self.my_sleep(5)
         second_time = self.find_element_and_action(By.ID,self.music_play_page_current_time_text_id,self.action.get_text,'获取已播放时长')
         log_utils.C_INFO('当前已播放时长为：'+second_time)
         if second_time > first_time:
@@ -180,8 +184,8 @@ class music_play_page(base_utils):
     def click_music_play_page_more_button(self):
         self.find_element_and_action(By.ID,self.music_play_page_more_button_id,self.action.click,'更多按钮')
 
-    def click_music_play_page_pley_pause_button(self):
-        self.find_element_and_action(By.ID,self.music_play_page_music_play_pause_button_id,self.action.click,'播放按钮')
+    def click_music_play_page_play_pause_button(self,str):
+        self.find_element_and_action(By.ID,self.music_play_page_music_play_pause_button_id,self.action.click,str)
 
     def click_music_play_page_next_song_button(self):
         self.find_element_and_action(By.ID,self.music_play_page_next_song_button_id,self.action.click,'下一曲按钮')

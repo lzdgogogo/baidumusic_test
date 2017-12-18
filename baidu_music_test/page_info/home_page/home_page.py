@@ -1,7 +1,8 @@
+# -*- coding:utf-8 -*-
 from selenium.webdriver.common.by import By
 from baidu_music_test.utils import log_utils
 from baidu_music_test.utils.base_utils import base_utils
-# -*- coding:utf-8 -*-
+
 #百度音乐APP首页，在这个页面中，左上角更多按钮、minibar、下边栏是一直显示的。
 
 class home_page(base_utils):

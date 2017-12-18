@@ -1,14 +1,16 @@
 # -*- coding:utf-8 -*-
 from selenium.webdriver.common.by import By
+
 from baidu_music_test.data import base_data
 from baidu_music_test.page_info.batch_download_page import batch_download_page
 from baidu_music_test.page_info.comment_page import comment_page
-from baidu_music_test.page_info.home_page.home_music_play_list_page import home_music_play_list_page
-from baidu_music_test.page_info.play_list_page import play_list_page
+from baidu_music_test.page_info.home_page.home_music_page_dependence_page.home_music_play_list_page import home_music_play_list_page
+from baidu_music_test.page_info.home_page.home_music_page_dependence_page.play_list_page import play_list_page
 from baidu_music_test.page_info.play_page.music_play_page import music_play_page
 from baidu_music_test.utils import log_utils
 from baidu_music_test.utils import api_utils
 from baidu_music_test.page_info import mv_page
+
 
 class play_list_case(home_music_play_list_page,music_play_page,play_list_page,mv_page.mv_play_page,comment_page,batch_download_page):
 

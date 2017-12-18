@@ -27,7 +27,7 @@ class home_music_play_list_page(home_music_page):
         """功能：
                 点击第一个歌单的布局来进入歌单页面"""
         if not self.find_element_and_action(By.XPATH,self.play_list_page_first_play_list_xpath,self.action.click,'第一个歌单') == 0:
-            log_utils.F_ERROR('点击第一个榜单失败')
+            log_utils.F_ERROR('点击第一个歌单失败')
             return 1
 
     def get_play_list_page_first_play_list_name(self):
@@ -39,5 +39,5 @@ class home_music_play_list_page(home_music_page):
         """功能：
                 点击第一个歌单的播放按钮"""
         if not self.find_element_and_action(By.XPATH,self.play_list_page_first_play_list_play_button_xpath,self.action.click,'第一个歌单的播放按钮') == 0:
-            log_utils.F_ERROR('点击第一个榜单的播放按钮失败')
+            log_utils.F_ERROR('点击第一个歌单的播放按钮失败')
             return 1

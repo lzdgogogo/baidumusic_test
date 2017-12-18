@@ -1,9 +1,10 @@
 # -*- coding:utf-8 -*-
 from selenium.webdriver.common.by import By
+
 from baidu_music_test.data import base_data
-from baidu_music_test.page_info.home_page.home_music_song_list_page import home_music_song_list_page
+from baidu_music_test.page_info.home_page.home_music_page_dependence_page.home_music_song_list_page import home_music_song_list_page
 from baidu_music_test.page_info.play_page.music_play_page import music_play_page
-from baidu_music_test.page_info.song_list_page import song_list_page
+from baidu_music_test.page_info.home_page.home_music_page_dependence_page.song_list_page import song_list_page
 from baidu_music_test.utils import log_utils
 from baidu_music_test.utils import api_utils
 
